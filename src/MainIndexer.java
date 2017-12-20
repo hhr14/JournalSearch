@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.w3c.dom.NamedNodeMap;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.ngram.NGramTokenizer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -60,6 +61,9 @@ public class MainIndexer {
 					return new TokenStreamComponents(source, filter);
 				}
 			};
+		}
+		else if (s.equalsIgnoreCase("ikanalyzer")){
+			analyzer = new IKAnalyzer(true);
 		}
 		else{
 			analyzer = new StandardAnalyzer();
@@ -161,6 +165,6 @@ public class MainIndexer {
 	}
 	public static void main(String args[])
 	throws Exception{
-		MainIndexer mainindexer = new MainIndexer("./data/CNKI_journal_v2.txt", "index", "unigram");
+		MainIndexer mainindexer = new MainIndexer("./data/CNKI_journal_v2.txt", "index", "ikanalyzer");
 	}
 }

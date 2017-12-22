@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,6 +25,7 @@ import org.apache.lucene.analysis.ngram.NGramTokenizer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.IntPoint;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
@@ -103,6 +106,7 @@ public class MainIndexer {
 			return;
 		Document document = new Document();
 		document.add(new StringField("id", String.valueOf(docnumber), Field.Store.YES));
+		document.add(new TextField("title", this.toBlankString(map, "title"), Field.Store.YES));
 		document.add(new TextField("eng_title", this.toBlankString(map, "eng_title"), Field.Store.YES));
 		document.add(new TextField("author", this.toBlankString(map, "author"), Field.Store.YES));
 		document.add(new TextField("eng_author", this.toBlankString(map, "eng_author"), Field.Store.YES));
@@ -114,6 +118,7 @@ public class MainIndexer {
 		document.add(new TextField("abstract", this.toBlankString(map, "abstract"), Field.Store.YES));
 		document.add(new TextField("eng_abstract", this.toBlankString(map, "eng_abstract"), Field.Store.YES));
 		document.add(new StringField("year", this.toBlankString(map, "year"), Field.Store.YES));
+//		document.add(new TextField("year_str", this.toBlankString(map, "year"), Field.Store.YES));
 		document.add(new TextField("subject_name", this.toBlankString(map, "subject_name"), Field.Store.YES));
 		document.add(new TextField("class_name", this.toBlankString(map, "class_name"), Field.Store.YES));
 		document.add(new TextField("publish_date", this.toBlankString(map, "publish_date"), Field.Store.YES));
@@ -166,5 +171,19 @@ public class MainIndexer {
 	public static void main(String args[])
 	throws Exception{
 		MainIndexer mainindexer = new MainIndexer("./data/CNKI_journal_v2.txt", "index", "ikanalyzer");
+//		Process p;
+//		String cmd = "./data/distance data/vectors.bin fa 10";
+//		try{
+//			p = Runtime.getRuntime().exec(cmd);
+//			InputStream fis = p.getInputStream();
+//			InputStreamReader isr=new InputStreamReader(fis);
+//			BufferedReader br=new BufferedReader(isr);
+//			String line = null;
+//			while((line = br.readLine()) != null){
+//				System.out.println(line);
+//			}
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
 	}
 }

@@ -29,6 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   <body>
   	<%
+  		String[] option_str = {"ikanalyzer", "unigram", "bigram", "trigram", "smartCN"};
  		String[] checkinputName = {"author_input", "title_input", "press_input", "time_from_input", "time_to_input", "fuzz_input"};
 		String currentInput[] = {"", "", "", "", "", ""};
 		String s = "false";
@@ -49,12 +50,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		String [] titleList = (String[])request.getAttribute("titleList");
 		String [] yearList = (String[])request.getAttribute("yearList");
 		String totalLength_str = (String)request.getAttribute("totalLength");
-		int totalLength = 0, nowPos = 0, minPage = 0, hitslength = 0;
+		int totalLength = 0, nowPos = 0, minPage = 0, hitslength = 0, option = 0;
 		if (totalLength_str != null){
 			totalLength = Integer.parseInt(totalLength_str);
 			nowPos = (Integer) request.getAttribute("nowPos");
 			minPage = (Integer) request.getAttribute("minPage");
 			hitslength = (Integer)request.getAttribute("hitslength");
+			option = (Integer)request.getAttribute("option");
 		}
 		String isSearch=(String) request.getAttribute("isSearch");
 	%>
@@ -100,6 +102,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   </div>
 		  
 		  <div class="form-group">
+		  	<label class="col-sm-offset-2 col-sm-1 control-label">分词方法</label>
+			<label class="col-sm-2 control-label">选择分词方法：</label>
+		    <div class="col-sm-2">
+		    	<select class="form-control" name="analysisSelect">
+		    		<% for (int i = 0;i < option_str.length;i ++){
+		    			if (option == i){ %>
+		    				<option selected="selected"><%=option_str[i] %></option>
+		    			<%}else{ %>
+		    				<option><%=option_str[i] %></option>
+		    			<%};
+		    		}; %>
+			    </select>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
 		  	<label for="inputEmail3" class="col-sm-offset-2 col-sm-1 control-label">近义词检索</label>
 		  	<label class="col-sm-2 control-label">请输入需要模糊查询的词：</label>
 		    <div class="col-sm-2">
@@ -110,8 +128,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
   
 	  <% 
-	  	if(titleList!=null && titleList.length>0){
-	  		for(int i=10*(currentPage - 1);i<Math.min(10*currentPage, hitslength);i++){
+	  	if(titleList!=null && titleList.length>0){ %>
+	  		<div class="col-sm-offset-1 col-sm-10">
+				<ul class="list-group">
+					<li class="list-group-item list-group-item-success">共找到<%=hitslength %>条结果！</li>
+				</ul>
+		  	</div>
+	  		<% for(int i=10*(currentPage - 1);i<Math.min(10*currentPage, hitslength);i++){
 	  			int iter = i - 10*(currentPage - 1);%>
 	  			<div class="col-sm-offset-1 col-sm-10">
 		  			<div class="panel panel-success">

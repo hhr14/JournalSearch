@@ -33,6 +33,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 
 public class MainIndexer {
@@ -69,7 +70,7 @@ public class MainIndexer {
 			analyzer = new IKAnalyzer(true);
 		}
 		else{
-			analyzer = new StandardAnalyzer();
+			analyzer = new SmartChineseAnalyzer();
 		}
 		return analyzer;
 	}
@@ -170,20 +171,10 @@ public class MainIndexer {
 	}
 	public static void main(String args[])
 	throws Exception{
-		MainIndexer mainindexer = new MainIndexer("./data/CNKI_journal_v2.txt", "index", "ikanalyzer");
-//		Process p;
-//		String cmd = "./data/distance data/vectors.bin fa 10";
-//		try{
-//			p = Runtime.getRuntime().exec(cmd);
-//			InputStream fis = p.getInputStream();
-//			InputStreamReader isr=new InputStreamReader(fis);
-//			BufferedReader br=new BufferedReader(isr);
-//			String line = null;
-//			while((line = br.readLine()) != null){
-//				System.out.println(line);
-//			}
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
+		String indexList[] = {"index/unigram", "index/bigram", "index/trigram", "index/ikanalyzer", "index/smartCN"};
+		String analysisList[] = {"unigram", "bigram", "trigram", "ikanalyzer", "smartCN"};
+		MainIndexer mainindexer = null;
+		for (int i = 0;i < indexList.length;i ++)
+			mainindexer = new MainIndexer("./data/CNKI_journal_v2.txt", indexList[i], analysisList[i]);
 	}
 }
